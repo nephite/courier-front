@@ -1,11 +1,9 @@
 import React from 'react'
 import {
   AccountBox as AccountBoxIcon,
-  ChatBubble,
   ChromeReaderMode,
   Dashboard as DashboardIcon,
   ExitToApp as ExitToAppIcon,
-  FilterList,
   FormatTextdirectionRToL as RTLIcon,
   FormatTextdirectionLToR as LTRIcon,
   GetApp,
@@ -13,12 +11,8 @@ import {
   Language as LanguageIcon,
   Lock as LockIcon,
   MenuOpen as MenuOpenIcon,
-  QuestionAnswer,
   SettingsApplications as SettingsIcon,
   Style as StyleIcon,
-  Tab,
-  ViewList,
-  Web,
 } from '@material-ui/icons'
 
 import allLocales from './locales'
@@ -103,58 +97,6 @@ const getMenuItems = (props) => {
       visible: isAuthorised,
       primaryText: intl.formatMessage({ id: 'home' }),
       leftIcon: <DashboardIcon />,
-    },
-    {
-      primaryText: intl.formatMessage({ id: 'demos', defaultMessage: 'Demos' }),
-      primaryTogglesNestedList: true,
-      leftIcon: <Web />,
-      nestedItems: [
-        {
-          value: '/dialog_demo',
-          visible: isAuthorised,
-          primaryText: intl.formatMessage({
-            id: 'dialog_demo',
-            defaultMessage: 'Dialog',
-          }),
-          leftIcon: <ChatBubble />,
-        },
-        {
-          value: '/toast_demo',
-          visible: isAuthorised,
-          primaryText: intl.formatMessage({
-            id: 'toast_demo',
-            defaultMessage: 'Toast',
-          }),
-          leftIcon: <QuestionAnswer />,
-        },
-        {
-          value: '/filter_demo',
-          visible: isAuthorised,
-          primaryText: intl.formatMessage({
-            id: 'filter_demo',
-            defaultMessage: 'Filter',
-          }),
-          leftIcon: <FilterList />,
-        },
-        {
-          value: '/list_page_demo',
-          visible: isAuthorised,
-          primaryText: intl.formatMessage({
-            id: 'list_page_demo_menu',
-            defaultMessage: 'List Page',
-          }),
-          leftIcon: <ViewList />,
-        },
-        {
-          value: '/tabs_demo',
-          visible: isAuthorised,
-          primaryText: intl.formatMessage({
-            id: 'tabs_demo',
-            defaultMessage: 'Tabs Page',
-          }),
-          leftIcon: <Tab />,
-        },
-      ],
     },
     {
       value: '/about',

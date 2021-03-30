@@ -6,6 +6,7 @@
     "@formatjs/intl-relativetimeformat": "^7.3.6",
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "axios": "^0.21.1",
     "base-shell": "^1.2.21",
     "github-markdown-css": "^4.0.0",
     "intl": "^1.2.5",
