@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 const LandingPage = () => {
   return (
@@ -16,8 +17,11 @@ const LandingPage = () => {
         flexDirection: 'column',
       }}
     >
+      <Helmet>
+        <title>{ 'e-lamove' }</title>
+      </Helmet>
       <h2>Landing Page</h2>
-
+      
       <div>
         <Link to="/home">Home</Link>
       </div>

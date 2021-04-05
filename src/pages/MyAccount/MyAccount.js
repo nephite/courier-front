@@ -27,6 +27,7 @@ const MyAccount = () => {
   } = auth || {}
   const [displayName, setDisplayName] = useState(currentDisplayName)
   const [photoURL, setPhotoURL] = useState(currentPhoroURL)
+  
   const [isImageDialogOpen, setImageDialogOpen] = useState(false)
 
   const hasChange =
@@ -169,7 +170,6 @@ const MyAccount = () => {
         </Paper>
         {
           <ImgageUploadDialog
-            isOpen={isImageDialogOpen}
             isOpen={isImageDialogOpen}
             handleClose={() => setImageDialogOpen(false)}
             handleCropSubmit={handleImageChange}
