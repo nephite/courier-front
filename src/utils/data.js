@@ -3,6 +3,10 @@ import _ from 'lodash';
 
 export const provincesWithoutPickUpLocation = [
   {
+    "id": 0,
+    "name": "",
+  },
+  {
     "id": 93,
     "name": "Metro Manila",
     "is_pickup_available": "T"
