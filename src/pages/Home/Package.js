@@ -6,23 +6,12 @@ import CardContent from '@material-ui/core/CardContent';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import { CardHeader } from '@material-ui/core';
 
-const useStyles = makeStyles({
-  root: {
-    maxWidth: 250,
-  },
-  media: {
-    height: 140,
-  },
-});
 
 const Package = (props) => {
 
   const { packageInfo, isSelected } = props
-
-  const classes = useStyles();
 
   return (
     <Fragment>
