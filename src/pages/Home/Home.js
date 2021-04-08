@@ -134,9 +134,9 @@ const HomePage = () => {
     })
   }
 
-  const handleChangeActiveStep = (step) => {
-    setActiveStep(step)
-  }
+  // const handleChangeActiveStep = (step) => {
+  //   setActiveStep(step)
+  // }
 
   const handlePackageInfo = (packageInfo) => {
     console.log(packageInfo)
