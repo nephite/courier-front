@@ -1,16 +1,18 @@
 import React, { useState, Fragment } from 'react'
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import GridList from '@material-ui/core/GridList';
 import PropTypes from 'prop-types';
 import Package from './Package'
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import GridList from '@material-ui/core/GridList';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import _ from 'lodash';
+import { Validator } from '../../utils/customValidator';
 import { makeStyles } from '@material-ui/core/styles';
 import { GridListTile } from '@material-ui/core';
 
@@ -66,10 +68,9 @@ const PackageDialog = (props) => {
   const classes = useStyles();
   const [packageName, setPackageName] = useState('')
   const [selectedPackage, setSelectedPackage] = useState(0)
+  const [errors, setErrors] = useState({})
   const [isCOD, setIsCOD] = useState(false)
-
   const { btnText, isOpen, getPackageInfo } = props
-
   const [isDialogOpen, setDialogOpen] = useState(isOpen || false)
 
   const handleDialogState = (isOpen) => {
@@ -80,13 +81,38 @@ const PackageDialog = (props) => {
     handleDialogState(true)
   }
 
-  const savePackageInfo = () => {
-    handleDialogClose()
-    getPackageInfo({
-      item_name: packageName,
-      is_cod: isCOD,
-      package: packageTypes[selectedPackage]
+  const validatePackageInfo = () => {
+    let pakcageValidationSchema = {
+      packageName: [
+        'isEmpty'
+      ],
+    }
+
+    let validator = new Validator()
+    validator.validate(pakcageValidationSchema, {
+      packageName: packageName
     })
+
+    let packageErrors = validator.getErrors()
+
+    if (_.isEmpty(packageErrors) === false) {
+      setErrors(packageErrors)
+      return true
+    }
+
+    return true
+  }
+
+  const savePackageInfo = () => {
+    let isValidPackage = validatePackageInfo()
+    if (isValidPackage === true) {
+      handleDialogClose()
+      getPackageInfo({
+        item_name: packageName,
+        is_cod: isCOD,
+        package: packageTypes[selectedPackage]
+      })
+    }
   }
 
   return (
@@ -113,6 +139,8 @@ const PackageDialog = (props) => {
               setPackageName(event.target.value)
             }}
             fullWidth
+            error={errors.hasOwnProperty('packageName') === true}
+            helperText={errors.hasOwnProperty('packageName') ? errors['packageName'][0] : '' }
           />
 
           <br />

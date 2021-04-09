@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from 'react'
+// import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -6,12 +7,18 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import axios from 'axios'
+import InputAdornment from '@material-ui/core/InputAdornment';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import PropTypes from 'prop-types';
-
+import _ from 'lodash';
+import axios from 'axios'
+import { Validator } from '../../utils/customValidator';
 import { provincesWithoutPickUpLocation, provincesWithPickUpLocation } from '../../utils/data';
 
+/**
+ * For the following object keys (province, city, district) 
+ * suffix _name is use for validation while the keys without suffix is the variable key for its real value
+ */
 const defaultInfo = {
   street: '',
   province: {
@@ -23,6 +30,9 @@ const defaultInfo = {
   district: {
     name: ''
   },
+  province_name: '',
+  city_name: '',
+  district_name: '',
   landmarks: '',
   full_name: '',
   cellphone_no: ''
@@ -57,18 +67,15 @@ const defaultProvincesProps = {
 const AddressDialog = (props) => {
 
   const { btnText, isOpen, getInfo, type, defaults } = props
-
   const [isDialogOpen, setDialogOpen] = useState(isOpen || false)
-
   const [info, setInfo] = useState(defaults || defaultInfo)
-
+  const [errors, setErrors] = useState({})
   const [cities, setCities] = useState({
     cached: {},
     selected: [{
       name: ''
     }],
   })
-
   const [districts, setDistricts] = useState({
     cached: {},
     selected: [{
@@ -77,10 +84,26 @@ const AddressDialog = (props) => {
   })
 
   const handleInfoChange = (event) => {
+    let value = event.target.value
+
+    if (event.target.name === 'cellphone_no') {
+      value = handleCellPhoneChange(value)
+    }
+
     setInfo({ 
       ...info, 
-      [event.target.name]: event.target.value
+      [event.target.name]: value
     })
+  }
+
+  const handleCellPhoneChange = (value) => {
+    const cpRegex = /^[0-9\b]+$/;
+
+    if (value === '' || cpRegex.test(value)) {
+      return value.slice(0, 10)
+    }
+
+    return info.cellphone_no
   }
 
   const handleDialogState = (isOpen) => {
@@ -119,7 +142,7 @@ const AddressDialog = (props) => {
       return;
     }
     
-    axios.get('http://localhost:8080/locations/cities', {
+    axios.get(process.env.REACT_APP_WEB_API + '/locations/cities', {
       params: {
         province_id: province.id
       }
@@ -140,7 +163,6 @@ const AddressDialog = (props) => {
   }
 
   const handleCityChange = (city) => {
-
     if (city === null) {
       return;
     }
@@ -154,7 +176,7 @@ const AddressDialog = (props) => {
       return;
     }
 
-    axios.get('http://localhost:8080/locations/districts', {
+    axios.get(process.env.REACT_APP_WEB_API + '/locations/districts', {
       params: {
         city_id: city.id
       }
@@ -170,6 +192,46 @@ const AddressDialog = (props) => {
     })
   }
 
+  const validateAddress = () => {
+    let addressValidationSchema = {
+      street: [
+        'isEmpty'
+      ],
+      province_name: [
+        'isEmpty'
+      ],
+      city_name: [
+        'isEmpty'
+      ],
+      district_name: [
+        'isEmpty'
+      ],
+      full_name: [
+        'isEmpty'
+      ],
+      cellphone_no: [
+        'isEmpty'
+      ]
+    }
+
+    let validator = new Validator()
+    validator.validate(addressValidationSchema, info)
+
+    let adddressErrors = validator.getErrors()
+
+    if (_.isEmpty(adddressErrors) === false) {
+      setErrors(adddressErrors)
+      return true
+    }
+
+    return true
+  }
+
+  const saveAdress = () => {
+    let isValidAddress = validateAddress()
+    console.log(isValidAddress)
+  }
+
   return (
     <Fragment>
       <Button 
@@ -181,7 +243,9 @@ const AddressDialog = (props) => {
       </Button>
     
       <Dialog open={isDialogOpen} onClose={handleDialogClose} aria-labelledby="form-dialog-title">
-        <DialogTitle>{capitalizeFirstLetter(type)}</DialogTitle>
+        <DialogTitle>Input {capitalizeFirstLetter(type)} Details</DialogTitle>
+
+        
         <DialogContent>
           <DialogContentText>
             {capitalizeFirstLetter(type) + '\'s details'}
@@ -196,27 +260,37 @@ const AddressDialog = (props) => {
             value={info.street}
             onChange={handleInfoChange}
             fullWidth
+            error={errors.hasOwnProperty('street') === true}
+            helperText={errors.hasOwnProperty('street') ? errors['street'][0] : '' }
           />
 
           <Autocomplete
             {...defaultProvincesProps[type]}
             clearOnEscape
-            name={"province"}
+            name={'province'}
             value={info.province}
             onChange={(event, newValue) => {
               handleProvinceChange(newValue)
               setInfo({
                 ...info,
+                province_name: (newValue.name || ''),
                 province: newValue
               })
             }}
-            renderInput={(params) => <TextField {...params} value={info.province} label="Province" margin="normal" />}
+            renderInput={(params) => <TextField 
+                  {...params} 
+                  value={info.province} 
+                  label="Province" 
+                  margin="normal" 
+                  error={errors.hasOwnProperty('province_name') === true}
+                  helperText={errors.hasOwnProperty('province_name') ? errors['province_name'][0] : '' }  
+                />}
           />
   
           <Autocomplete
             {...defaultOptionProps}
             clearOnEscape
-            name={"city"}
+            name={'city'}
             value={info.city}
             options={cities.selected}
             onChange={(event, newValue) => {
@@ -224,29 +298,42 @@ const AddressDialog = (props) => {
             
               setInfo({
                 ...info,
+                city_name: (newValue.name || ''),
                 city: newValue
               })
             }}
-            renderInput={(params) => <TextField {...params}  label="City" margin="normal" />}
+            renderInput={(params) => <TextField 
+                  {...params}
+                  label="City" 
+                  margin="normal" 
+                  error={errors.hasOwnProperty('city_name') === true}
+                  helperText={errors.hasOwnProperty('city_name') ? errors['city_name'][0] : '' }
+                />}
           />
 
           <Autocomplete
              {...defaultOptionProps}
              clearOnEscape
-             name={"district"}
+             name={'district'}
              value={info.district}
              options={districts.selected}
              onChange={(event, newValue) => {
                setInfo({
                  ...info,
+                 district_name: (newValue.name || ''),
                  district: newValue
                })
              }}
-             renderInput={(params) => <TextField {...params} label="District" margin="normal" />}
+            renderInput={(params) => <TextField 
+                  {...params} 
+                  label="District" 
+                  margin="normal" 
+                  error={errors.hasOwnProperty('district_name') === true}
+                  helperText={errors.hasOwnProperty('district_name') ? errors['district_name'][0] : '' }
+                />}
            />
 
           <TextField
-            autoFocus
             margin="dense"
             name={"landmarks"}
             value={info.landmarks}
@@ -257,32 +344,41 @@ const AddressDialog = (props) => {
           />
 
           <TextField
-            autoFocus
             margin="dense"
             label={capitalizeFirstLetter(type) + '\'s Full Name'}
             type="text"
-            name={"full_name"}
+            name={'full_name'}
             value={info.full_name}
             onChange={handleInfoChange}
             fullWidth
+            error={errors.hasOwnProperty('full_name') === true}
+            helperText={errors.hasOwnProperty('full_name') ? errors['full_name'][0] : '' }
           />
 
           <TextField
-            autoFocus
             margin="dense"
             label={capitalizeFirstLetter(type) + '\'s Mobile Number'}
             type="text"
-            name={"cellphone_no"}
+            name={'cellphone_no'}
             value={info.cellphone_no}
             onChange={handleInfoChange}
             fullWidth
+            error={errors.hasOwnProperty('cellphone_no') === true}
+            helperText={errors.hasOwnProperty('cellphone_no') ? errors['cellphone_no'][0] : '' }
+            InputProps={{
+              startAdornment: <InputAdornment position="start">+63</InputAdornment>,
+            }}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => { manageInfo(true) }} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => { manageInfo(false) }} color="primary">
+          <Button 
+            onClick={(event) => {
+              saveAdress()
+             }
+            } color="primary">
             Use Address
           </Button>
         </DialogActions>

@@ -7,10 +7,9 @@ import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import { CardHeader } from '@material-ui/core';
-
+import { Validator } from '../../utils/customValidator';
 
 const Package = (props) => {
-
   const { packageInfo, isSelected } = props
 
   return (
