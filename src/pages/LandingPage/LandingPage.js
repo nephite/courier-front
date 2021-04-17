@@ -33,7 +33,7 @@ const LandingPage = () => {
   const [errors, setErrors] = useState({})
   
   const handleSearctTransactionLogs = (id) => {
-    axios.get('http://localhost:8080/deliveries/' + id.toString() + '/logs')
+    axios.get('https://dev-courier-api.herokuapp.com/deliveries/' + id.toString() + '/logs')
     .then(function (response) {
       setTransactionLogs(response.data.data.logs)
       

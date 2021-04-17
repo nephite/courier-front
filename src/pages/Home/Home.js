@@ -214,7 +214,7 @@ const HomePage = () => {
 
     console.log('requestData', requestData)
     
-    axios.post('http://localhost:8080/deliveries', requestData)
+    axios.post('https://dev-courier-api.herokuapp.com/deliveries', requestData)
     .then(function (response) {
       ToastEmitter('success', 'Transaction are successfuly created!')
       setDelivery(defaultDelivery)

@@ -141,7 +141,7 @@ const AddressDialog = (props) => {
       return;
     }
     
-    axios.get('http://localhost:8080/locations/cities', {
+    axios.get('https://dev-courier-api.herokuapp.com/locations/cities', {
       params: {
         province_id: province.id
       }
@@ -175,7 +175,7 @@ const AddressDialog = (props) => {
       return;
     }
 
-    axios.get('http://localhost:8080/locations/districts', {
+    axios.get('https://dev-courier-api.herokuapp.com/locations/districts', {
       params: {
         city_id: city.id
       }
