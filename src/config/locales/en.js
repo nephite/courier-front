@@ -10,6 +10,8 @@ const messages = defineMessages({
   password: 'Password',
   about: 'About',
   home: 'Home',
+  delivery: 'Delivery',
+  transaction: 'Transaction',
   page_not_found: 'Page not found',
   settings: 'Settings',
   theme: 'Theme',

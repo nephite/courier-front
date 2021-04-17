@@ -41,6 +41,7 @@ const packageTypes = [
   {
     name: 'Small/Medium',
     item_type: 'S-M',
+    item_code: 's_m',
     rate: 60,
     weight: 'Max weight: 3 kg',
     size: '23.7cm x 39.8cm',
@@ -49,6 +50,7 @@ const packageTypes = [
   {
     name: 'Large',
     item_type: 'M',
+    item_code: 'm',
     rate: 60,
     weight: 'Max weight: 3 kg',
     size: '28.8cm x 44.7cm',
@@ -57,6 +59,7 @@ const packageTypes = [
   {
     name: 'Extra Large',
     item_type: 'XL',
+    item_code: 'xl',
     rate: 60,
     weight: 'Max weight: 3 kg',
     size: '30cm x 50.5cm',
@@ -69,7 +72,7 @@ const PackageDialog = (props) => {
   const [packageName, setPackageName] = useState('')
   const [selectedPackage, setSelectedPackage] = useState(0)
   const [errors, setErrors] = useState({})
-  const [isCOD, setIsCOD] = useState(false)
+  const [isCOD, setIsCOD] = useState('F')
   const { btnText, isOpen, getPackageInfo } = props
   const [isDialogOpen, setDialogOpen] = useState(isOpen || false)
 
@@ -97,7 +100,7 @@ const PackageDialog = (props) => {
 
     if (_.isEmpty(packageErrors) === false) {
       setErrors(packageErrors)
-      return true
+      return false
     }
 
     return true
@@ -113,6 +116,7 @@ const PackageDialog = (props) => {
         package: packageTypes[selectedPackage]
       })
     }
+    
   }
 
   return (
@@ -166,7 +170,8 @@ const PackageDialog = (props) => {
             control={
               <Checkbox
                 onChange={() => {
-                  setIsCOD(!isCOD)
+                  let value = isCOD === 'T' ? 'F' : 'T'
+                  setIsCOD(value)
                 }}
                 name="checkedF"
               />

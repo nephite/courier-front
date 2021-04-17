@@ -116,6 +116,104 @@ const SignUp = () => {
               autoFocus
             />
             <TextField
+              value={''}
+              onInput={() => {}}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="first_name"
+              label={'First Name'}
+              name="first_name"
+              autoComplete="firstname"
+              autoFocus
+            />
+            <TextField
+              value={''}
+              onInput={() => {}}
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="last_name"
+              label={'Last Name'}
+              name="last_name"
+              autoComplete="last_name"
+              autoFocus
+            />
+            <TextField
+              value={''}
+              onInput={() => {}}
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              id="middle_name"
+              label={'Middle Name'}
+              name="last_name"
+              autoComplete="middle_name"
+              autoFocus
+            />
+            <TextField
+              value={''}
+              onInput={() => {}}
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              id="street"
+              label={'Street'}
+              name="street"
+              autoComplete="street"
+              autoFocus
+            />
+            <TextField
+              value={''}
+              onInput={() => {}}
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              id="province"
+              label={'Province'}
+              name="province"
+              autoComplete="province"
+              autoFocus
+            />
+            <TextField
+              value={''}
+              onInput={() => {}}
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              id="city"
+              label={'City'}
+              name="City"
+              autoComplete="city"
+              autoFocus
+            />
+            <TextField
+              value={''}
+              onInput={() => {}}
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              id="district"
+              label={'District'}
+              name="district"
+              autoComplete="district"
+              autoFocus
+            />
+            <TextField
+              value={''}
+              onInput={() => {}}
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              id="landmarks"
+              label={'Landmarks'}
+              name="landmarks"
+              autoComplete="landmarks"
+              autoFocus
+            />
+            <TextField
               value={userEmail}
               onInput={(e) => setUserEmail(e.target.value)}
               variant="outlined"

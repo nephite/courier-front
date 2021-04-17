@@ -9,6 +9,7 @@ import {
   GetApp,
   InfoOutlined,
   Language as LanguageIcon,
+  ViewList as ViewListIcon,
   Lock as LockIcon,
   MenuOpen as MenuOpenIcon,
   SettingsApplications as SettingsIcon,
@@ -97,6 +98,12 @@ const getMenuItems = (props) => {
       visible: isAuthorised,
       primaryText: intl.formatMessage({ id: 'home' }),
       leftIcon: <DashboardIcon />,
+    },
+    {
+      value: '/transaction',
+      visible: isAuthorised,
+      primaryText: intl.formatMessage({ id: 'transaction' }),
+      leftIcon: <ViewListIcon />,
     },
     {
       value: '/about',

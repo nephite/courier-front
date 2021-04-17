@@ -10,6 +10,7 @@ const PasswordReset = lazy(() => import('../pages/PasswordReset/PasswordReset'))
 const About = lazy(() => import('../pages/About'))
 const Home = lazy(() => import('../pages/Home/Home'))
 const MyAccount = lazy(() => import('../pages/MyAccount/MyAccount'))
+const Transaction = lazy(() => import('../pages/Transaction/Transaction'))
 
 const routes = [
   <UnauthorizedRoute path="/signin" redirectTo="/" exact component={SignIn} />,
@@ -23,6 +24,7 @@ const routes = [
   <Route path="/about" exact component={About} />,
   <AuthorizedRoute path="/my_account" exact component={MyAccount} />,
   <AuthorizedRoute path="/home" exact component={Home} />,
+  <AuthorizedRoute path="/transaction" exact component={Transaction} />,
 ]
 
 export default routes

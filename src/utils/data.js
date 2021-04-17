@@ -419,3 +419,115 @@ export const provincesWithoutPickUpLocation = [
 ]
 
 export const provincesWithPickUpLocation = _.filter(provincesWithoutPickUpLocation, function(province) { return province.is_pickup_available === 'T'; })
+
+
+export const RATES = {
+  metro_manila: {
+    s_m: {
+        cod: 90,
+        non_cod: 60,
+    },
+    l: {
+      cod: 100,
+      non_cod: 70,
+    },
+    xl: {
+      cod: 130,
+      non_cod: 90,
+    },
+    own_packaging: {
+      cod: 150,
+      non_cod: 120,
+    }
+  },
+  cavite: {
+    s_m: {
+        cod: 130,
+        non_cod: 90,
+    },
+    l: {
+      cod: 140,
+      non_cod: 100,
+    },
+    xl: {
+      cod: 160,
+      non_cod: 120,
+    },
+    own_packaging: {
+      cod: 180,
+      non_cod: 150,
+    }
+  },
+  bulacan: {
+    s_m: {
+        cod: 140,
+        non_cod: 100,
+    },
+    l: {
+      cod: 150,
+      non_cod: 110,
+    },
+    xl: {
+      cod: 170,
+      non_cod: 130,
+    },
+    own_packaging: {
+      cod: 220,
+      non_cod: 180,
+    }
+  },
+  laguna: {
+    s_m: {
+        cod: 140,
+        non_cod: 100,
+    },
+    l: {
+      cod: 150,
+      non_cod: 110,
+    },
+    xl: {
+      cod: 170,
+      non_cod: 130,
+    },
+    own_packaging: {
+      cod: 220,
+      non_cod: 190,
+    }
+  },
+  rizal_a: {
+    s_m: {
+        cod: 120,
+        non_cod: 80,
+    },
+    l: {
+      cod: 130,
+      non_cod: 90,
+    },
+    xl: {
+      cod: 150,
+      non_cod: 110,
+    },
+    own_packaging: {
+      cod: 180,
+      non_cod: 150,
+    }
+  },
+  rizal_b: {
+    s_m: {
+        cod: 140,
+        non_cod: 100,
+    },
+    l: {
+      cod: 150,
+      non_cod: 110,
+    },
+    xl: {
+      cod: 170,
+      non_cod: 130,
+    },
+    own_packaging: {
+      cod: 220,
+      non_cod: 180,
+    }
+  }
+}

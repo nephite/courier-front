@@ -16,7 +16,13 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import { RATES } from '../../utils/data';
 
+import _ from 'lodash';
+import axios from 'axios'
+
+import { useConfirm } from 'material-ui-confirm';
+import { ToastEmitter } from '../../components/Toast';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,12 +41,71 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['Set Sender Info', 'Set Recipient Info', 'Set Package Details'];
+  return ['Set Sender Info', 'Set Recipient Info', 'Set Package Details', 'Review Details'];
 }
 
-
+const defaultDelivery = {
+  item_name: '',
+  is_provincial: 'F',
+  item_type: 'S-M',
+  item_amount: 0,
+  total_amount: 0,
+  package: {
+    item_name: '',
+    is_cod: 'F',
+    package: {
+      name: 'Small/Medium',
+      item_type: 'S-M',
+      item_code: 's_m',
+      rate: 60,
+      weight: 'Max weight: 3 kg',
+      size: '23.7cm x 39.8cm',
+      description: ''}
+  },
+  sender: {
+    full_name: '',
+    province_name: '',
+    province: {
+      name: ''
+    },
+    city_name: '',
+    city: {
+      name: ''
+    },
+    district_name: '',
+    district: {
+      name: '',
+      postal_code: ''
+    },
+    cellphone_no: '',
+    street: '',
+    landmarks: ''
+  },
+  recipient: {
+    full_name: '',
+    province_name: '',
+    province: {
+      name: ''
+    },
+    city_name: '',
+    city: {
+      name: ''
+    },
+    district_name: '',
+    district: {
+      name: '',
+      postal_code: ''
+    },
+    cellphone_no: '',
+    street: '',
+    landmarks: ''
+  }
+}
 
 const HomePage = () => {
+  const confirm = useConfirm();
+  const intl = useIntl()
+  const [delivery, setDelivery] = useState(defaultDelivery)
 
   const classes = useStyles();
   const [activeStep, setActiveStep] =useState(0);
@@ -64,14 +129,16 @@ const HomePage = () => {
         return (
           <Fragment>
             <AddressDialog
+              defaults={delivery.sender}
               btnText={'Set Sender'}
               type={'sender'}
               getInfo={(data) => {
-                console.log(data)
-              handleDeliveryState('sender', data)
+                handleDeliveryState('sender', data)
               }}
             />
-            {delivery.sender.full_name + ', ' + delivery.sender.province.name}
+            <p>
+              Sender: {delivery.sender.full_name}, {delivery.sender.cellphone_no}, {delivery.sender.province_name}, {delivery.sender.city_name}, {delivery.sender.district_name}, {delivery.sender.district.postal_code}
+            </p>
           </Fragment>
         );
       case 1:
@@ -81,11 +148,12 @@ const HomePage = () => {
               btnText={'Set Recipient'}
               type={'recipient'}
               getInfo={(data) => {
-                console.log(data)
-              handleDeliveryState('recipient', data)
+                handleDeliveryState('recipient', data)
               }}
             />
-            {delivery.recipient.full_name + ', ' + delivery.recipient.province.name}
+            <p>
+            Recipient: {delivery.recipient.province_name}, {delivery.recipient.city_name}, {delivery.recipient.district_name}, {delivery.recipient.district.postal_code}
+            </p>
           </Fragment>
         );
       case 2:
@@ -95,37 +163,80 @@ const HomePage = () => {
               getPackageInfo={handlePackageInfo}
             />
           </Fragment>
-        );;
+        );
+      case 3:
+        return (
+          <Fragment>
+            <h1>Summary</h1>
+            <ul>
+              <li>Sender: {delivery.sender.full_name}, {delivery.sender.cellphone_no}, {delivery.sender.street}, {delivery.sender.landmarks}, {delivery.sender.province_name}, {delivery.sender.city_name}, {delivery.sender.district_name}, {delivery.sender.district.postal_code}</li>
+              <li>Recipient: {delivery.recipient.full_name}, {delivery.recipient.cellphone_no}, {delivery.recipient.street}, {delivery.recipient.landmarks}, {delivery.recipient.province_name}, {delivery.recipient.city_name}, {delivery.recipient.district_name}, {delivery.recipient.district.postal_code}</li>
+              <li>Package: {delivery.package.item_name}, {delivery.package.package.name}</li>
+              <li>Shipping Rate: {delivery.package.package.rate}</li>
+              <li>Cash on Delivery: {delivery.package.is_cod}</li>
+              <li>Total Amount: {computeShippingRate()}</li>
+            </ul>
+          </Fragment>
+        );
       default:
         return 'Unknown step';
     }
   }
-  
-  const intl = useIntl()
-  const [delivery, setDelivery] = useState({
-    sender: {
-      full_name: '',
-      province: {
-        name: ''
-      },
-      city: {
-        name: ''
-      },
-      district: {
-        name: ''
-      },
-      cellphone_no: '',
-      street: '',
-      landmarks: ''
-    },
-    recipient: {
-      full_name: '',
-      province: '',
-      city: '',
-      disctrict: '',
-      cellphone_no: ''
+
+  const requestDelivery = () => {
+    let requestData  = {
+      client_id: "1",
+      is_cod: delivery.package.is_cod,
+      is_provincial: 'F',
+      item_name: delivery.package.item_name,
+      item_type: delivery.package.package.item_type,
+      item_amount: delivery.package.package.rate,
+      total_amount: computeShippingRate(),
+      sender: _.pick(delivery.sender, ['full_name', 'cellphone_no']),
+      recipient: _.pick(delivery.recipient, ['full_name', 'cellphone_no',])
     }
-  })
+
+    requestData.sender.cellphone_no = '0' + delivery.sender.cellphone_no
+    requestData.sender.province = delivery.sender.province_name
+    requestData.sender.city = delivery.sender.city_name
+    requestData.sender.district = delivery.sender.district_name
+    requestData.sender.postal_code = delivery.sender.postal_code
+    requestData.sender.postal_code = delivery.sender.landmarks
+    requestData.sender.street = delivery.sender.street
+
+    requestData.recipient.cellphone_no = '0' + delivery.recipient.cellphone_no
+    requestData.recipient.province = delivery.recipient.province_name
+    requestData.recipient.city = delivery.recipient.city_name
+    requestData.recipient.district = delivery.recipient.district_name
+    requestData.recipient.postal_code = delivery.recipient.postal_code
+    requestData.recipient.postal_code = delivery.recipient.landmarks
+    requestData.recipient.street = delivery.recipient.street
+
+    console.log('requestData', requestData)
+    
+    axios.post('http://localhost:8080/deliveries', requestData)
+    .then(function (response) {
+      ToastEmitter('success', 'Transaction are successfuly created!')
+      setDelivery(defaultDelivery)
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+  }
+
+  const computeShippingRate = () => {
+    let provinceName = delivery.sender.province_name.toLowerCase().replace(' ', '_')
+    if (provinceName === '') {
+      return 60
+    } else {
+      console.log(delivery)
+      let codKey = (delivery.package.is_cod === 'T') ? 'cod' : 'non_cod'
+      let packageValueKey = delivery.package.package.item_code
+      let shippingFee = RATES[provinceName][packageValueKey][codKey]
+    return shippingFee
+    }
+    
+  }
 
   const handleDeliveryState = (key, value) => {
     setDelivery({
@@ -140,6 +251,18 @@ const HomePage = () => {
 
   const handlePackageInfo = (packageInfo) => {
     console.log(packageInfo)
+    setDelivery({
+      ...delivery,
+      package: packageInfo
+    })
+  }
+
+  const handleFinish = () => {
+    confirm({ description: 'This action is permanent!' })
+      .then(() => { 
+        requestDelivery()
+      })
+      .catch(() => { /* ... */ });
   }
 
   return (
@@ -152,8 +275,7 @@ const HomePage = () => {
       >
         <h1>Delivery</h1>
         
-        
-
+    
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((label, index) => (
           <Step key={label}>
@@ -173,7 +295,7 @@ const HomePage = () => {
                     // disabled
                     variant="contained"
                     color="primary"
-                    onClick={handleNext}
+                    onClick={activeStep === steps.length - 1 ? handleFinish: handleNext}
                     className={classes.button}
                   >
                     {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
@@ -193,9 +315,8 @@ const HomePage = () => {
         </Paper>
       )}
       </Scrollbar>
-
-      
     </Page>
   )
 }
+
 export default HomePage

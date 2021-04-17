@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from 'react'
-// import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -142,7 +141,7 @@ const AddressDialog = (props) => {
       return;
     }
     
-    axios.get(process.env.REACT_APP_WEB_API + '/locations/cities', {
+    axios.get('http://localhost:8080/locations/cities', {
       params: {
         province_id: province.id
       }
@@ -150,10 +149,10 @@ const AddressDialog = (props) => {
     .then(function (response) {
       citiesCopy.cached[cityKey] = response.data.data.cities
       let citiesOptions = [{
-        "id": 0,
-        "name": "",
+        'id': 0,
+        'name': '',
       }]
-      citiesOptions += response.data.data.cities
+      citiesOptions = response.data.data.cities
       citiesCopy['selected'] = citiesOptions
       setCities(citiesCopy)
     })
@@ -176,7 +175,7 @@ const AddressDialog = (props) => {
       return;
     }
 
-    axios.get(process.env.REACT_APP_WEB_API + '/locations/districts', {
+    axios.get('http://localhost:8080/locations/districts', {
       params: {
         city_id: city.id
       }
@@ -229,7 +228,11 @@ const AddressDialog = (props) => {
 
   const saveAdress = () => {
     let isValidAddress = validateAddress()
-    console.log(isValidAddress)
+    if (isValidAddress === true) {
+      getInfo(info)
+      setDialogOpen(false)
+      return
+    }
   }
 
   return (
@@ -271,9 +274,10 @@ const AddressDialog = (props) => {
             value={info.province}
             onChange={(event, newValue) => {
               handleProvinceChange(newValue)
+              console.log(newValue, 'newValue')
               setInfo({
                 ...info,
-                province_name: (newValue.name || ''),
+                province_name: (newValue.hasOwnProperty('name') === undefined ?  '' : newValue.name),
                 province: newValue
               })
             }}
@@ -298,7 +302,7 @@ const AddressDialog = (props) => {
             
               setInfo({
                 ...info,
-                city_name: (newValue.name || ''),
+                city_name: (newValue.hasOwnProperty('name') === undefined ?  '' : newValue.name),
                 city: newValue
               })
             }}
@@ -320,7 +324,7 @@ const AddressDialog = (props) => {
              onChange={(event, newValue) => {
                setInfo({
                  ...info,
-                 district_name: (newValue.name || ''),
+                 district_name: (newValue.hasOwnProperty('name') === undefined ?  '' : newValue.name),
                  district: newValue
                })
              }}
