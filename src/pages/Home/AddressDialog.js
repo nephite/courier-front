@@ -274,10 +274,18 @@ const AddressDialog = (props) => {
             value={info.province}
             onChange={(event, newValue) => {
               handleProvinceChange(newValue)
-              console.log(newValue, 'newValue')
+              
+              let value = ''
+
+              if (newValue === null) {
+                value = ''
+              } else if ('name' in newValue) {
+                value = newValue.name
+              }
+
               setInfo({
                 ...info,
-                province_name: (newValue.hasOwnProperty('name') === undefined ?  '' : newValue.name),
+                province_name: value,
                 province: newValue
               })
             }}
@@ -299,10 +307,18 @@ const AddressDialog = (props) => {
             options={cities.selected}
             onChange={(event, newValue) => {
               handleCityChange(newValue)
-            
+              
+              let value = ''
+
+              if (newValue === null) {
+                value = ''
+              } else if ('name' in newValue) {
+                value = newValue.name
+              }
+
               setInfo({
                 ...info,
-                city_name: (newValue.hasOwnProperty('name') === undefined ?  '' : newValue.name),
+                city_name: value,
                 city: newValue
               })
             }}
@@ -322,9 +338,17 @@ const AddressDialog = (props) => {
              value={info.district}
              options={districts.selected}
              onChange={(event, newValue) => {
+                let value = ''
+
+                if (newValue === null) {
+                  value = ''
+                } else if ('name' in newValue) {
+                  value = newValue.name
+                }
+
                setInfo({
                  ...info,
-                 district_name: (newValue.hasOwnProperty('name') === undefined ?  '' : newValue.name),
+                 district_name: value,
                  district: newValue
                })
              }}

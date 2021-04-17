@@ -1,25 +1,19 @@
 import React, { useState, Fragment } from 'react'
-// import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import axios from 'axios'
-import { Validator } from '../../utils/customValidator';
-import { provincesWithoutPickUpLocation, provincesWithPickUpLocation } from '../../utils/data';
+// import { Validator } from '../../utils/customValidator';
 import { makeStyles } from '@material-ui/core/styles';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useConfirm } from 'material-ui-confirm';
 import { ToastEmitter } from '../../components/Toast';
@@ -64,11 +58,11 @@ const useStyles = makeStyles((theme) => ({
 
 const TransactionDialog = (props) => {
   const classes = useStyles();
-  const { btnText, isOpen, getInfo, transaction } = props
+  const { isOpen, getInfo, transaction } = props
   const [isDialogOpen, setDialogOpen] = useState(isOpen !== undefined ? isOpen : false)
   const [info, setInfo] = useState(transaction || defaultInfo)
   const [cachedInfo,] = useState(transaction || defaultInfo)
-  const [errors, setErrors] = useState({})
+  // const [, setErrors] = useState({})
   const confirm = useConfirm();
 
   const handleInfoChange = (event) => {
@@ -85,15 +79,15 @@ const TransactionDialog = (props) => {
     })
   }
 
-  const handleCellPhoneChange = (value) => {
-    const cpRegex = /^[0-9\b]+$/;
+  // const handleCellPhoneChange = (value) => {
+  //   const cpRegex = /^[0-9\b]+$/;
 
-    if (value === '' || cpRegex.test(value)) {
-      return value.slice(0, 10)
-    }
+  //   if (value === '' || cpRegex.test(value)) {
+  //     return value.slice(0, 10)
+  //   }
 
-    return info.cellphone_no
-  }
+  //   return info.cellphone_no
+  // }
 
   const handleDialogState = (isOpen) => {
     setDialogOpen((isOpen === true) ? false : !isDialogOpen)
@@ -112,40 +106,40 @@ const TransactionDialog = (props) => {
     }
   }
 
-  const validateAddress = () => {
-    let addressValidationSchema = {
-      street: [
-        'isEmpty'
-      ],
-      province_name: [
-        'isEmpty'
-      ],
-      city_name: [
-        'isEmpty'
-      ],
-      district_name: [
-        'isEmpty'
-      ],
-      full_name: [
-        'isEmpty'
-      ],
-      cellphone_no: [
-        'isEmpty'
-      ]
-    }
+  // const validateAddress = () => {
+  //   let addressValidationSchema = {
+  //     street: [
+  //       'isEmpty'
+  //     ],
+  //     province_name: [
+  //       'isEmpty'
+  //     ],
+  //     city_name: [
+  //       'isEmpty'
+  //     ],
+  //     district_name: [
+  //       'isEmpty'
+  //     ],
+  //     full_name: [
+  //       'isEmpty'
+  //     ],
+  //     cellphone_no: [
+  //       'isEmpty'
+  //     ]
+  //   }
 
-    let validator = new Validator()
-    validator.validate(addressValidationSchema, info)
+  //   let validator = new Validator()
+  //   validator.validate(addressValidationSchema, info)
 
-    let adddressErrors = validator.getErrors()
+  //   let adddressErrors = validator.getErrors()
 
-    if (_.isEmpty(adddressErrors) === false) {
-      setErrors(adddressErrors)
-      return true
-    }
+  //   if (_.isEmpty(adddressErrors) === false) {
+  //     setErrors(adddressErrors)
+  //     return true
+  //   }
 
-    return true
-  }
+  //   return true
+  // }
 
   const getDifference = (obj1, obj2) => {
     let diffs = {}

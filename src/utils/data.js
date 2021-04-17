@@ -3,423 +3,502 @@ import _ from 'lodash';
 
 export const provincesWithoutPickUpLocation = [
   {
-    "id": 0,
-    "name": "",
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 49,
+      "is_pickup_available": "T",
+      "name": "Metro Manila"
   },
   {
-    "id": 93,
-    "name": "Metro Manila",
-    "is_pickup_available": "T"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 42,
+      "is_pickup_available": "T",
+      "name": "Laguna"
   },
   {
-    "id": 94,
-    "name": "Abra",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 53,
+      "is_pickup_available": "F",
+      "name": "Negros Occidental"
   },
   {
-    "id": 95,
-    "name": "Agusan Del Norte",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 54,
+      "is_pickup_available": "F",
+      "name": "Negros Oriental"
   },
   {
-    "id": 96,
-    "name": "Agusan Del Sur",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 55,
+      "is_pickup_available": "F",
+      "name": "Northern Samar"
   },
   {
-    "id": 97,
-    "name": "Aklan",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 56,
+      "is_pickup_available": "F",
+      "name": "Nueva Ecija"
   },
   {
-    "id": 98,
-    "name": "Albay",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 57,
+      "is_pickup_available": "F",
+      "name": "Nueva Vizcaya"
   },
   {
-    "id": 99,
-    "name": "Antique",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 58,
+      "is_pickup_available": "F",
+      "name": "Occidental Mindoro"
   },
   {
-    "id": 100,
-    "name": "Apayao",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 59,
+      "is_pickup_available": "F",
+      "name": "Oriental Mindoro"
   },
   {
-    "id": 101,
-    "name": "Aurora",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 60,
+      "is_pickup_available": "F",
+      "name": "Palawan"
   },
   {
-    "id": 102,
-    "name": "Basilan",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 52,
+      "is_pickup_available": "F",
+      "name": "Mountain Province"
   },
   {
-    "id": 103,
-    "name": "Bataan",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 51,
+      "is_pickup_available": "F",
+      "name": "Misamis Oriental"
   },
   {
-    "id": 104,
-    "name": "Batanes",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 43,
+      "is_pickup_available": "F",
+      "name": "Lanao Del Norte"
   },
   {
-    "id": 105,
-    "name": "Batangas",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 44,
+      "is_pickup_available": "F",
+      "name": "Lanao Del Sur"
   },
   {
-    "id": 106,
-    "name": "Benguet",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 45,
+      "is_pickup_available": "F",
+      "name": "Leyte"
   },
   {
-    "id": 107,
-    "name": "Biliran",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 46,
+      "is_pickup_available": "F",
+      "name": "Maguindanao"
   },
   {
-    "id": 108,
-    "name": "Bohol",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 47,
+      "is_pickup_available": "F",
+      "name": "Marinduque"
   },
   {
-    "id": 109,
-    "name": "Bukidnon",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 48,
+      "is_pickup_available": "F",
+      "name": "Masbate"
   },
   {
-    "id": 110,
-    "name": "Bulacan",
-    "is_pickup_available": "T"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 50,
+      "is_pickup_available": "F",
+      "name": "Misamis Occidental"
   },
   {
-    "id": 111,
-    "name": "Cagayan",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 61,
+      "is_pickup_available": "F",
+      "name": "Pampanga"
   },
   {
-    "id": 112,
-    "name": "Camarines Norte",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 62,
+      "is_pickup_available": "F",
+      "name": "Pangasinan"
   },
   {
-    "id": 113,
-    "name": "Camarines Sur",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 63,
+      "is_pickup_available": "F",
+      "name": "Quezon"
   },
   {
-    "id": 114,
-    "name": "Camiguin",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 74,
+      "is_pickup_available": "F",
+      "name": "Sulu"
   },
   {
-    "id": 115,
-    "name": "Capiz",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 75,
+      "is_pickup_available": "F",
+      "name": "Surigao Del Norte"
   },
   {
-    "id": 116,
-    "name": "Cantanduanes",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 76,
+      "is_pickup_available": "F",
+      "name": "Surigao Del Sur"
   },
   {
-    "id": 117,
-    "name": "Cavite",
-    "is_pickup_available": "T"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 77,
+      "is_pickup_available": "F",
+      "name": "Tarlac"
   },
   {
-    "id": 118,
-    "name": "Cebu",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 78,
+      "is_pickup_available": "F",
+      "name": "Tawi-Tawi"
   },
   {
-    "id": 119,
-    "name": "Cotabato",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 79,
+      "is_pickup_available": "F",
+      "name": "Zambales"
   },
   {
-    "id": 120,
-    "name": "Davao Del Norte",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 80,
+      "is_pickup_available": "F",
+      "name": "Zamboaga Del Norte"
   },
   {
-    "id": 121,
-    "name": "Davao Del Sur",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 81,
+      "is_pickup_available": "F",
+      "name": "Zamboaga Del Sur"
   },
   {
-    "id": 122,
-    "name": "Davao Occidental",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 73,
+      "is_pickup_available": "F",
+      "name": "Sultan Kudarat"
   },
   {
-    "id": 123,
-    "name": "Davao Oriental",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 72,
+      "is_pickup_available": "F",
+      "name": "Southern Leyte"
   },
   {
-    "id": 124,
-    "name": "Davao de Oro",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 64,
+      "is_pickup_available": "F",
+      "name": "Quirino"
   },
   {
-    "id": 125,
-    "name": "Dinagat Islands",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 65,
+      "is_pickup_available": "T",
+      "name": "Rizal"
   },
   {
-    "id": 126,
-    "name": "Eastern Samar",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 66,
+      "is_pickup_available": "F",
+      "name": "Romblon"
   },
   {
-    "id": 127,
-    "name": "Guimaras",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 67,
+      "is_pickup_available": "F",
+      "name": "Samar"
   },
   {
-    "id": 128,
-    "name": "Ifugao",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 68,
+      "is_pickup_available": "F",
+      "name": "Sarangani"
   },
   {
-    "id": 129,
-    "name": "Ilocos Norte",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 69,
+      "is_pickup_available": "F",
+      "name": "Suquijor"
   },
   {
-    "id": 130,
-    "name": "Ilocos Sur",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 70,
+      "is_pickup_available": "F",
+      "name": "Sorsogon"
   },
   {
-    "id": 131,
-    "name": "Iloilo",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 71,
+      "is_pickup_available": "F",
+      "name": "South Cotabato"
   },
   {
-    "id": 132,
-    "name": "Isabela",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 82,
+      "is_pickup_available": "F",
+      "name": "Zamboaga Sibugay"
   },
   {
-    "id": 133,
-    "name": "Kalinga",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 1,
+      "is_pickup_available": "F",
+      "name": "Abra"
   },
   {
-    "id": 134,
-    "name": "La Union",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 12,
+      "is_pickup_available": "F",
+      "name": "Batangas"
   },
   {
-    "id": 135,
-    "name": "Laguna",
-    "is_pickup_available": "T"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 13,
+      "is_pickup_available": "F",
+      "name": "Benguet"
   },
   {
-    "id": 136,
-    "name": "Lanao Del Norte",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 14,
+      "is_pickup_available": "F",
+      "name": "Biliran"
   },
   {
-    "id": 137,
-    "name": "Lanao Del Sur",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 15,
+      "is_pickup_available": "F",
+      "name": "Bohol"
   },
   {
-    "id": 138,
-    "name": "Leyte",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 16,
+      "is_pickup_available": "F",
+      "name": "Bukidnon"
   },
   {
-    "id": 139,
-    "name": "Maguindanao",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 17,
+      "is_pickup_available": "T",
+      "name": "Bulacan"
   },
   {
-    "id": 140,
-    "name": "Marinduque",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 18,
+      "is_pickup_available": "F",
+      "name": "Cagayan"
   },
   {
-    "id": 141,
-    "name": "Masbate",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 19,
+      "is_pickup_available": "F",
+      "name": "Camarines Norte"
   },
   {
-    "id": 142,
-    "name": "Misamis Occidental",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 11,
+      "is_pickup_available": "F",
+      "name": "Batanes"
   },
   {
-    "id": 143,
-    "name": "Misamis Oriental",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 10,
+      "is_pickup_available": "F",
+      "name": "Bataan"
   },
   {
-    "id": 144,
-    "name": "Mountain Province",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 2,
+      "is_pickup_available": "F",
+      "name": "Agusan Del Norte"
   },
   {
-    "id": 145,
-    "name": "Negros Occidental",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 3,
+      "is_pickup_available": "F",
+      "name": "Agusan Del Sur"
   },
   {
-    "id": 146,
-    "name": "Negros Oriental",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 4,
+      "is_pickup_available": "F",
+      "name": "Aklan"
   },
   {
-    "id": 147,
-    "name": "Northern Samar",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 5,
+      "is_pickup_available": "F",
+      "name": "Albay"
   },
   {
-    "id": 148,
-    "name": "Nueva Ecija",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 6,
+      "is_pickup_available": "F",
+      "name": "Antique"
   },
   {
-    "id": 149,
-    "name": "Nueva Vizcaya",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 7,
+      "is_pickup_available": "F",
+      "name": "Apayao"
   },
   {
-    "id": 150,
-    "name": "Occidental Mindoro",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 8,
+      "is_pickup_available": "F",
+      "name": "Aurora"
   },
   {
-    "id": 151,
-    "name": "Oriental Mindoro",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 9,
+      "is_pickup_available": "F",
+      "name": "Basilan"
   },
   {
-    "id": 152,
-    "name": "Palawan",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 20,
+      "is_pickup_available": "F",
+      "name": "Camarines Sur"
   },
   {
-    "id": 153,
-    "name": "Pampanga",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 21,
+      "is_pickup_available": "F",
+      "name": "Camiguin"
   },
   {
-    "id": 154,
-    "name": "Pangasinan",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 22,
+      "is_pickup_available": "F",
+      "name": "Capiz"
   },
   {
-    "id": 155,
-    "name": "Quezon",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 33,
+      "is_pickup_available": "F",
+      "name": "Eastern Samar"
   },
   {
-    "id": 156,
-    "name": "Quirino",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 34,
+      "is_pickup_available": "F",
+      "name": "Guimaras"
   },
   {
-    "id": 157,
-    "name": "Rizal",
-    "is_pickup_available": "T"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 35,
+      "is_pickup_available": "F",
+      "name": "Ifugao"
   },
   {
-    "id": 158,
-    "name": "Romblon",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 36,
+      "is_pickup_available": "F",
+      "name": "Ilocos Norte"
   },
   {
-    "id": 159,
-    "name": "Samar",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 37,
+      "is_pickup_available": "F",
+      "name": "Ilocos Sur"
   },
   {
-    "id": 160,
-    "name": "Sarangani",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 38,
+      "is_pickup_available": "F",
+      "name": "Iloilo"
   },
   {
-    "id": 161,
-    "name": "Suquijor",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 39,
+      "is_pickup_available": "F",
+      "name": "Isabela"
   },
   {
-    "id": 162,
-    "name": "Sorsogon",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 40,
+      "is_pickup_available": "F",
+      "name": "Kalinga"
   },
   {
-    "id": 163,
-    "name": "South Cotabato",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 32,
+      "is_pickup_available": "F",
+      "name": "Dinagat Islands"
   },
   {
-    "id": 164,
-    "name": "Southern Leyte",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 31,
+      "is_pickup_available": "F",
+      "name": "Davao de Oro"
   },
   {
-    "id": 165,
-    "name": "Sultan Kudarat",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 23,
+      "is_pickup_available": "F",
+      "name": "Cantanduanes"
   },
   {
-    "id": 166,
-    "name": "Sulu",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 24,
+      "is_pickup_available": "T",
+      "name": "Cavite"
   },
   {
-    "id": 167,
-    "name": "Surigao Del Norte",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 25,
+      "is_pickup_available": "F",
+      "name": "Cebu"
   },
   {
-    "id": 168,
-    "name": "Surigao Del Sur",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 26,
+      "is_pickup_available": "F",
+      "name": "Cotabato"
   },
   {
-    "id": 169,
-    "name": "Tarlac",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 27,
+      "is_pickup_available": "F",
+      "name": "Davao Del Norte"
   },
   {
-    "id": 170,
-    "name": "Tawi-Tawi",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 28,
+      "is_pickup_available": "F",
+      "name": "Davao Del Sur"
   },
   {
-    "id": 171,
-    "name": "Zambales",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 29,
+      "is_pickup_available": "F",
+      "name": "Davao Occidental"
   },
   {
-    "id": 172,
-    "name": "Zamboaga Del Norte",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 30,
+      "is_pickup_available": "F",
+      "name": "Davao Oriental"
   },
   {
-    "id": 173,
-    "name": "Zamboaga Del Sur",
-    "is_pickup_available": "F"
-  },
-  {
-    "id": 174,
-    "name": "Zamboaga Sibugay",
-    "is_pickup_available": "F"
+      "created_timestamp": "2021-04-17T01:51:53",
+      "id": 41,
+      "is_pickup_available": "F",
+      "name": "La Union"
   }
 ]
 
 export const provincesWithPickUpLocation = _.filter(provincesWithoutPickUpLocation, function(province) { return province.is_pickup_available === 'T'; })
 
+export const greater_manila = ['', '']
 
 export const RATES = {
   metro_manila: {

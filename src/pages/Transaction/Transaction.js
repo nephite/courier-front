@@ -49,7 +49,7 @@ const tableIcons = {
 const Transaction = () => {
   const intl = useIntl()
   const confirm = useConfirm();
-  const [trasanctions, setTrasanctions] = useState([])
+  // const [trasanctions, setTrasanctions] = useState([])
   const [isTransDialogOpen, setTransDialogOpen] = useState(false)
 
   const [selectedTransaction, setSelectedTransaction] = useState()

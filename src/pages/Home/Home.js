@@ -16,7 +16,7 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { RATES } from '../../utils/data';
+// import { RATES } from '../../utils/data';
 
 import _ from 'lodash';
 import axios from 'axios'
@@ -200,16 +200,16 @@ const HomePage = () => {
     requestData.sender.province = delivery.sender.province_name
     requestData.sender.city = delivery.sender.city_name
     requestData.sender.district = delivery.sender.district_name
-    requestData.sender.postal_code = delivery.sender.postal_code
-    requestData.sender.postal_code = delivery.sender.landmarks
+    requestData.sender.postal_code = delivery.sender.district.postal_code
+    requestData.sender.landmarks = delivery.sender.landmarks
     requestData.sender.street = delivery.sender.street
 
     requestData.recipient.cellphone_no = '0' + delivery.recipient.cellphone_no
     requestData.recipient.province = delivery.recipient.province_name
     requestData.recipient.city = delivery.recipient.city_name
     requestData.recipient.district = delivery.recipient.district_name
-    requestData.recipient.postal_code = delivery.recipient.postal_code
-    requestData.recipient.postal_code = delivery.recipient.landmarks
+    requestData.recipient.postal_code = delivery.recipient.district.postal_code
+    requestData.recipient.landmarks = delivery.recipient.landmarks
     requestData.recipient.street = delivery.recipient.street
 
     console.log('requestData', requestData)
@@ -230,9 +230,10 @@ const HomePage = () => {
       return 60
     } else {
       console.log(delivery)
-      let codKey = (delivery.package.is_cod === 'T') ? 'cod' : 'non_cod'
-      let packageValueKey = delivery.package.package.item_code
-      let shippingFee = RATES[provinceName][packageValueKey][codKey]
+      // let codKey = (delivery.package.is_cod === 'T') ? 'cod' : 'non_cod'
+      // let packageValueKey = delivery.package.package.item_code
+      let shippingFee = 100
+      // let shippingFee = RATES[provinceName][packageValueKey][codKey]
     return shippingFee
     }
     

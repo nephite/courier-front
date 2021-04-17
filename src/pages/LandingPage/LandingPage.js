@@ -11,7 +11,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
+// import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -29,6 +29,7 @@ const LandingPage = () => {
   const [transaction, setTransaction] = useState({})
   const [transactionLogs, setTransactionLogs] = useState([])
   const [trackingID, setTrackingID] = useState('')
+  const [isChecked, setIsChecked] = useState('F')
   const [errors, setErrors] = useState({})
   
   const handleSearctTransactionLogs = (id) => {
@@ -49,10 +50,19 @@ const LandingPage = () => {
       return
     }
     setErrors({})
-    axios.get('http://localhost:8080/deliveries' , {
-      params: {
-        tracking_id: trackingID
+
+    let requestParams = {
+      'tracking_id': trackingID
+    }
+
+    if (isChecked === 'T') {
+      requestParams = {
+        'receipt_id': trackingID
       }
+    }
+
+    axios.get('http://localhost:8080/deliveries' , {
+      params: requestParams
     })
     .then(function (response) {
       console.log(response.data.data.deliveries)
@@ -60,6 +70,7 @@ const LandingPage = () => {
         setTransaction(response.data.data.deliveries[0])
         handleSearctTransactionLogs(response.data.data.deliveries[0].id)
       } else {
+        setTransaction({})
         ToastEmitter('error', 'Trasanction Not found')
       }
       
@@ -113,6 +124,17 @@ const LandingPage = () => {
           Search
       </Button>
       
+      <FormControlLabel
+      control={<Checkbox 
+        checked={(isChecked === 'T')}
+        name="isChecked"
+        onClick={() => {
+          let newValues = isChecked === 'T' ? 'F' : 'T'
+          setIsChecked(newValues)
+        }}
+      />}
+      label="Search using Receipt or Waybill "
+    />
 
       {_.isEmpty(transaction) === true ? 
         <p>No Transaction available</p> 
@@ -120,7 +142,8 @@ const LandingPage = () => {
         <div>
         <h3>Details</h3>
         <ul>
-          <li>Tracking ID: {trackingID}</li>
+          <li>Tracking ID: {transaction.tracking_id}</li>
+          <li>Receipt ID: {transaction.receipt_id}</li>
           <li>Total Amount: {transaction.total_amount}</li>
           <li>Item Name: {transaction.item_name}</li>
           <li>Booked: {transaction.created_timestamp}</li>

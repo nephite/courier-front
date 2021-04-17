@@ -26,7 +26,7 @@ export class Validator {
     for (const [key, value] of Object.entries(schema)) {
       let errors = []
       console.log(key, typeof key, value)
-      for (const [_, name] of Object.entries(value)) {
+      for (const [, name] of Object.entries(value)) {
         if (this[name](data[key]) === true) {
           errors.push(this.messages[name])
         }
@@ -40,4 +40,5 @@ export class Validator {
 
 }
 
+// eslint-disable-next-line
 export default { Validator }
