@@ -64,7 +64,7 @@ const Transaction = () => {
   }
 
   const requestCancelTransaction = (trasanction) => {
-    axios.put('http://localhost:8080/deliveries/' + trasanction['id'].toString(), {
+    axios.put(process.env.REACT_APP_WEB_API + '/deliveries/' + trasanction['id'].toString(), {
       is_cancelled: 'T'
     })
     .then(function (response) {
@@ -114,7 +114,7 @@ const Transaction = () => {
           data={query =>
             new Promise((resolve, reject) => {
               console.log('query', query)
-              let url = 'http://localhost:8080/deliveries?'
+              let url = process.env.REACT_APP_WEB_API + '/deliveries?'
               url += 'limit=' + query.pageSize
               url += '&page=' + (query.page + 1)
               fetch(url)

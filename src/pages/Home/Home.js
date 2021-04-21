@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react'
 
 import Page from 'material-ui-shell/lib/containers/Page'
 import Scrollbar from 'material-ui-shell/lib/components/Scrollbar/Scrollbar'
-import { useIntl } from 'react-intl'
+// import { useIntl } from 'react-intl'
 import { Helmet } from 'react-helmet'
 import AddressDialog from './AddressDialog';
 import PackageDialog from './PackageDialog';
@@ -45,6 +45,41 @@ function getSteps() {
   return ['Set Sender Info', 'Set Recipient Info', 'Set Package Details', 'Review Details'];
 }
 
+const METRO_MANILA_RATE = {
+  s: 100,
+  m: 150,
+  l: 180,
+  b: 220 
+}
+
+const GREATER_MANILA_RATE = {
+  s: 120,
+  m: 180,
+  l: 200,
+  b: 250 
+}
+
+const LUZON_RATE = {
+  s: 200,
+  m: 230,
+  l: 280,
+  b: 470 
+}
+
+const VISAYAS_RATE = {
+  s: 220,
+  m: 250,
+  l: 300,
+  b: 500 
+}
+
+const MINDANAO_RATE = {
+  s: 240,
+  m: 270,
+  l: 320,
+  b: 550 
+}
+
 const defaultDelivery = {
   item_name: '',
   is_provincial: 'F',
@@ -55,9 +90,9 @@ const defaultDelivery = {
     item_name: '',
     is_cod: 'F',
     package: {
-      name: 'Small/Medium',
-      item_type: 'S-M',
-      item_code: 's_m',
+      name: 'Small',
+      item_type: 'S',
+      item_code: 's',
       rate: 60,
       weight: 'Max weight: 3 kg',
       size: '23.7cm x 39.8cm',
@@ -105,7 +140,7 @@ const defaultDelivery = {
 
 const HomePage = () => {
   const confirm = useConfirm();
-  const intl = useIntl()
+  // const intl = useIntl()
   const [delivery, setDelivery] = useState(defaultDelivery)
   const [cachedSenderLocations, setCachedSenderLocations] = useState({
     cities: {
@@ -186,7 +221,8 @@ const HomePage = () => {
       case 2:
         return (
           <Fragment>
-            <PackageDialog 
+            <PackageDialog
+              defaults={delivery.package}
               getPackageInfo={handlePackageInfo}
             />
           </Fragment>
@@ -241,27 +277,33 @@ const HomePage = () => {
 
 
     let response = await deliveriesAPI.post(requestData)
-    console.log(response)
-    if (response.status === 'success') {
-      ToastEmitter('success', 'Transaction are successfuly created!')
+    if (response.status === 200) {
+      ToastEmitter('success', 'Transaction are successfully created!')
       setDelivery(defaultDelivery)
+    } else {
+      ToastEmitter('error', 'Something went wrong!')
     }
     
   }
 
   const computeShippingRate = () => {
-    let provinceName = delivery.sender.province_name.toLowerCase().replace(' ', '_')
-    if (provinceName === '') {
-      return 60
+    let provinceName = delivery.recipient.province_name.toLowerCase().replace(' ', '_')
+    let shippingFee = 100
+    let greaterManila = [' laguna','cavite', 'rizal', 'bulacan']
+
+    if (provinceName === 'metro_manila') {
+      shippingFee = METRO_MANILA_RATE[delivery.package.package.item_code]
+    } else if (provinceName === 'luzon' && provinceName in greaterManila) {
+      shippingFee = GREATER_MANILA_RATE[delivery.package.package.item_code]
+    } else if (provinceName === 'luzon') {
+      shippingFee = LUZON_RATE[delivery.package.package.item_code]
+    } else if (provinceName === 'visayas') {
+      shippingFee = VISAYAS_RATE[delivery.package.package.item_code]
     } else {
-      console.log(delivery)
-      // let codKey = (delivery.package.is_cod === 'T') ? 'cod' : 'non_cod'
-      // let packageValueKey = delivery.package.package.item_code
-      let shippingFee = 100
-      // let shippingFee = RATES[provinceName][packageValueKey][codKey]
-    return shippingFee
+      shippingFee = MINDANAO_RATE[delivery.package.package.item_code]
     }
-    
+
+    return shippingFee
   }
 
   const handleDeliveryState = (key, value) => {
@@ -272,7 +314,6 @@ const HomePage = () => {
   }
 
   const handlePackageInfo = (packageInfo) => {
-    console.log(packageInfo)
     setDelivery({
       ...delivery,
       package: packageInfo
@@ -297,16 +338,6 @@ const HomePage = () => {
         style={{ height: '100%', width: '100%', display: 'flex', flex: 1 }}
       >
         <h1>Details</h1>
-        <h3>Sender</h3>
-        <span>{delivery.sender.full_name}, </span> <span>{delivery.sender.full_name}, </span>
-        <ul>
-              <li>Sender: {delivery.sender.full_name}, {delivery.sender.cellphone_no}, {delivery.sender.street}, {delivery.sender.landmarks}, {delivery.sender.province_name}, {delivery.sender.city_name}, {delivery.sender.district_name}, {delivery.sender.district.postal_code}</li>
-              <li>Recipient: {delivery.recipient.full_name}, {delivery.recipient.cellphone_no}, {delivery.recipient.street}, {delivery.recipient.landmarks}, {delivery.recipient.province_name}, {delivery.recipient.city_name}, {delivery.recipient.district_name}, {delivery.recipient.district.postal_code}</li>
-              <li>Package: {delivery.package.item_name}, {delivery.package.package.name}</li>
-              <li>Shipping Rate: {delivery.package.package.rate}</li>
-              <li>Cash on Delivery: {delivery.package.is_cod}</li>
-              <li>Total Amount: {computeShippingRate()}</li>
-            </ul>
     
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((label, index) => (

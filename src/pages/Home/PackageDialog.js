@@ -39,28 +39,37 @@ const useStyles = makeStyles((theme) => ({
 
 const packageTypes = [
   {
-    name: 'Small/Medium',
-    item_type: 'S-M',
-    item_code: 's_m',
-    rate: 60,
+    name: 'Small',
+    item_type: 'S',
+    item_code: 's',
+    rate: 100,
     weight: 'Max weight: 3 kg',
     size: '23.7cm x 39.8cm',
     description: ''
   },
   {
-    name: 'Large',
+    name: 'Medium',
     item_type: 'M',
     item_code: 'm',
-    rate: 60,
+    rate: 150,
     weight: 'Max weight: 3 kg',
     size: '28.8cm x 44.7cm',
     description: ''
   },
   {
-    name: 'Extra Large',
-    item_type: 'XL',
-    item_code: 'xl',
-    rate: 60,
+    name: 'Large',
+    item_type: 'L',
+    item_code: 'l',
+    rate: 180,
+    weight: 'Max weight: 3 kg',
+    size: '30cm x 50.5cm',
+    description: ''
+  },
+  {
+    name: 'Box',
+    item_type: 'B',
+    item_code: 'b',
+    rate: 220,
     weight: 'Max weight: 3 kg',
     size: '30cm x 50.5cm',
     description: ''
@@ -68,12 +77,12 @@ const packageTypes = [
 ]
 
 const PackageDialog = (props) => {
+  const { btnText, isOpen, getPackageInfo, defaults } = props
   const classes = useStyles();
-  const [packageName, setPackageName] = useState('')
-  const [selectedPackage, setSelectedPackage] = useState(0)
+  const [packageName, setPackageName] = useState(defaults.item_name && '')
+  const [selectedPackage, setSelectedPackage] = useState(['s', 'm', 'l', 'b'].indexOf(defaults.package.item_code) && 0)
   const [errors, setErrors] = useState({})
-  const [isCOD, setIsCOD] = useState('F')
-  const { btnText, isOpen, getPackageInfo } = props
+  const [isCOD, setIsCOD] = useState(defaults.isCOD && 'F')
   const [isDialogOpen, setDialogOpen] = useState(isOpen || false)
 
   const handleDialogState = (isOpen) => {

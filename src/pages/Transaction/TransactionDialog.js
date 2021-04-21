@@ -17,7 +17,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useConfirm } from 'material-ui-confirm';
 import { ToastEmitter } from '../../components/Toast';
-
+import { useAuth } from 'base-shell/lib/providers/Auth'
 
 /**
  * For the following object keys (province, city, district) 
@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TransactionDialog = (props) => {
+  const auth = useAuth()
   const classes = useStyles();
   const { isOpen, getInfo, transaction } = props
   const [isDialogOpen, setDialogOpen] = useState(isOpen !== undefined ? isOpen : false)
@@ -143,7 +144,7 @@ const TransactionDialog = (props) => {
 
   const getDifference = (obj1, obj2) => {
     let diffs = {}
-    let allowedKeys = ['is_for_pick_up', 'is_already_pick_up', 'is_in_transit', 'is_delivered', 'is_successful', 'is_remitted', 'comments', 'receipt_id']
+    let allowedKeys = ['is_for_pick_up', 'is_already_pick_up', 'is_in_transit', 'is_delivered', 'is_successful', 'is_remitted', 'comments', 'receipt_id', 'client_id']
     Object.keys(obj1).forEach(key => {
        if(obj1[key] !== obj2[key]){
         diffs[key] = obj2[key]
@@ -154,7 +155,8 @@ const TransactionDialog = (props) => {
  }
 
   const requestForUpdate = (data) => {
-    axios.put('http://localhost:8080/deliveries/' + data['id'].toString(), data)
+    
+    axios.put(process.env.REACT_APP_WEB_API + '/deliveries/' + data['id'].toString(), data)
     .then(function (response) {
       console.log(response)
       ToastEmitter('success', 'Transaction are now updated')
@@ -169,6 +171,9 @@ const TransactionDialog = (props) => {
       .then(() => { 
         let infoForUpdate = getDifference(cachedInfo, info)
         infoForUpdate['id'] = info['id']
+        console.log(auth)
+        infoForUpdate['client_id'] = auth.auth.client_id
+        infoForUpdate['retry'] = 1
         requestForUpdate(infoForUpdate)
       })
       .catch(() => { /* ... */ });

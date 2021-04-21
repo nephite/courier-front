@@ -34,7 +34,7 @@ const LandingPage = () => {
   
   const handleSearctTransactionLogs = (id) => {
     
-    axios.get('http://localhost:8080/deliveries/' + id.toString() + '/logs')
+    axios.get(process.env.REACT_APP_WEB_API + '/deliveries/' + id.toString() + '/logs')
     .then(function (response) {
       setTransactionLogs(response.data.data.logs)
       
@@ -62,7 +62,7 @@ const LandingPage = () => {
       }
     }
 
-    axios.get('http://localhost:8080/deliveries' , {
+    axios.get(process.env.REACT_APP_WEB_API + '/deliveries' , {
       params: requestParams
     })
     .then(function (response) {

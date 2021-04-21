@@ -9,7 +9,7 @@ import ApiCore from './core'
 const deliveriesAPI = new ApiCore({
   getAll: true,
   post: true,
-  url: 'locations/provinces'
+  url: 'deliveries'
 });
 
 
