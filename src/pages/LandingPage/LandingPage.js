@@ -99,7 +99,7 @@ const LandingPage = () => {
         <title>{ 'e-lamove' }</title>
       </Helmet>
       <h2>Tracking Page</h2>
-      <p>{process.env.NODE_ENV}, {process.env.REACT_APP_WEB_API}, {'tests'}, {console.log(process.env)}</p>
+      
       <div>
         <Link to="/home">Home</Link>
       </div>
