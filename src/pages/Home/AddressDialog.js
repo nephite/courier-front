@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -10,8 +10,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import axios from 'axios'
 import { Validator } from '../../utils/customValidator';
+import { locationsAPI } from '../../services/api/locations';
 import { provincesWithoutPickUpLocation, provincesWithPickUpLocation } from '../../utils/data';
 
 /**
@@ -20,15 +20,9 @@ import { provincesWithoutPickUpLocation, provincesWithPickUpLocation } from '../
  */
 const defaultInfo = {
   street: '',
-  province: {
-    name: ''
-  },
-  city: {
-    name: ''
-  },
-  district: {
-    name: ''
-  },
+  province: {},
+  city: {},
+  district: {},
   province_name: '',
   city_name: '',
   district_name: '',
@@ -37,49 +31,35 @@ const defaultInfo = {
   cellphone_no: ''
 }
 
-const defaultOptionProps = {
-  options: [
-    {
-      name: 'title1',
-    },
-    {
-      name: 'title2',
-    },
-    {
-      name: 'title3',
-    },
-  ],
-  getOptionLabel: (option) => option.name,
-};
+const defaultAutoCompleteOption = {
+  id: 0,
+  name: ''
+}
 
 const defaultProvincesProps = {
   sender: {
-    options: provincesWithPickUpLocation,
+    options: [{id: 0, name: ''}, ...provincesWithPickUpLocation],
     getOptionLabel: (option) => option.name,
   },
   recipient: {
-    options: provincesWithoutPickUpLocation,
+    options: [{id: 0, name: ''}, ...provincesWithoutPickUpLocation],
     getOptionLabel: (option) => option.name,
   }
 }
 
 const AddressDialog = (props) => {
 
-  const { btnText, isOpen, getInfo, type, defaults } = props
+  const { btnText, isOpen, getInfo, type, defaults, cachedLocations } = props
   const [isDialogOpen, setDialogOpen] = useState(isOpen || false)
   const [info, setInfo] = useState(defaults || defaultInfo)
   const [errors, setErrors] = useState({})
-  const [cities, setCities] = useState({
+  const [cities, setCities] = useState(cachedLocations.cities || {
     cached: {},
-    selected: [{
-      name: ''
-    }],
+    selected: [{id: 0, name: ''}],
   })
-  const [districts, setDistricts] = useState({
+  const [districts, setDistricts] = useState(cachedLocations.districts || {
     cached: {},
-    selected: [{
-      name: ''
-    }],
+    selected: [{id: 0, name: ''}],
   })
 
   const handleInfoChange = (event) => {
@@ -115,19 +95,18 @@ const AddressDialog = (props) => {
 
   const manageInfo = (isClearInfo) => {
     handleDialogClose()
-    if (isClearInfo === true) {
-      setInfo(defaultInfo)
-    } else {
-      getInfo(info)
-    }
+    // if (isClearInfo === true) {
+    //   setInfo(defaultInfo)
+    // } else {
+    //   getInfo(info)
+    // }
   }
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  const handleProvinceChange = (province) => {
-    
+  const handleProvinceChange = async (province) => {
     if (province === null) {
       return;
     }
@@ -140,28 +119,20 @@ const AddressDialog = (props) => {
       setCities(citiesCopy)
       return;
     }
-    
-    axios.get('https://dev-courier-api.herokuapp.com/locations/cities', {
-      params: {
-        province_id: province.id
-      }
+
+    let response = await locationsAPI.getAvailableCities({
+      province_id: province.id
     })
-    .then(function (response) {
-      citiesCopy.cached[cityKey] = response.data.data.cities
-      let citiesOptions = [{
-        'id': 0,
-        'name': '',
-      }]
-      citiesOptions = response.data.data.cities
-      citiesCopy['selected'] = citiesOptions
+
+    if (_.isEmpty(response.errors) === true) {
+      let citiesOptions = [defaultAutoCompleteOption]
+      citiesCopy.cached[cityKey] = citiesOptions.concat(response.data.cities)
+      citiesCopy.selected = citiesOptions.concat(response.data.cities)
       setCities(citiesCopy)
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
+    }
   }
 
-  const handleCityChange = (city) => {
+  const handleCityChange = async (city) => {
     if (city === null) {
       return;
     }
@@ -175,20 +146,16 @@ const AddressDialog = (props) => {
       return;
     }
 
-    axios.get('https://dev-courier-api.herokuapp.com/locations/districts', {
-      params: {
-        city_id: city.id
-      }
+    let response = await locationsAPI.getAvailableDistrict({
+      city_id: city.id
     })
-    .then(function (response) {
-      districtsCopy.cached[districtKey] = response.data.data.districts
-      districtsCopy['selected'] = response.data.data.districts
-      
+
+    if (_.isEmpty(response.errors) === true) {
+      let districtOptions = [defaultAutoCompleteOption]
+      districtsCopy.cached[districtKey] = districtOptions.concat(response.data.districts)
+      districtsCopy.selected = districtOptions.concat(response.data.districts)
       setDistricts(districtsCopy)
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
+    }
   }
 
   const validateAddress = () => {
@@ -217,19 +184,22 @@ const AddressDialog = (props) => {
     validator.validate(addressValidationSchema, info)
 
     let adddressErrors = validator.getErrors()
-
-    if (_.isEmpty(adddressErrors) === false) {
-      setErrors(adddressErrors)
-      return true
-    }
-
-    return true
+    setErrors(adddressErrors)
+    
+    return _.isEmpty(adddressErrors)
   }
 
   const saveAdress = () => {
     let isValidAddress = validateAddress()
+    
     if (isValidAddress === true) {
-      getInfo(info)
+      getInfo({
+        info: info,
+        cachedLocations: {
+          cities: cities,
+          districts: districts
+        } 
+      })
       setDialogOpen(false)
       return
     }
@@ -246,12 +216,12 @@ const AddressDialog = (props) => {
       </Button>
     
       <Dialog open={isDialogOpen} onClose={handleDialogClose} aria-labelledby="form-dialog-title">
-        <DialogTitle>Input {capitalizeFirstLetter(type)} Details</DialogTitle>
+        <DialogTitle>{capitalizeFirstLetter(type)} Details</DialogTitle>
 
         
         <DialogContent>
           <DialogContentText>
-            {capitalizeFirstLetter(type) + '\'s details'}
+            {'Please enter the neccessary information'}
           </DialogContentText>
 
           <TextField
@@ -269,23 +239,29 @@ const AddressDialog = (props) => {
 
           <Autocomplete
             {...defaultProvincesProps[type]}
+            getOptionSelected={(option, value) => option.name === value.name }
             clearOnEscape
             name={'province'}
             value={info.province}
             onChange={(event, newValue) => {
-              handleProvinceChange(newValue)
-              
-              let value = ''
+              if (newValue !== null) {
+                handleProvinceChange(newValue)
+              }
 
+              let value = ''
               if (newValue === null) {
                 value = ''
               } else if ('name' in newValue) {
                 value = newValue.name
               }
-
+            
               setInfo({
                 ...info,
+                city_name: '',
+                city: {id:0, name: ''},
                 province_name: value,
+                district_name: '',
+                district: {id:0, name: ''},
                 province: newValue
               })
             }}
@@ -300,13 +276,16 @@ const AddressDialog = (props) => {
           />
   
           <Autocomplete
-            {...defaultOptionProps}
+            options={cities.selected}
+            getOptionLabel={(option) => option.name}
+            getOptionSelected={(option, value) => option.name === value.name }
             clearOnEscape
             name={'city'}
             value={info.city}
-            options={cities.selected}
             onChange={(event, newValue) => {
-              handleCityChange(newValue)
+              if (newValue !== null) {
+                handleCityChange(newValue)
+              }
               
               let value = ''
 
@@ -318,6 +297,8 @@ const AddressDialog = (props) => {
 
               setInfo({
                 ...info,
+                district_name: '',
+                district: {id:0, name: ''},
                 city_name: value,
                 city: newValue
               })
@@ -332,14 +313,14 @@ const AddressDialog = (props) => {
           />
 
           <Autocomplete
-             {...defaultOptionProps}
+             options={districts.selected}
+             getOptionLabel={(option) => option.name}
+             getOptionSelected={(option, value) => option.name === value.name}
              clearOnEscape
              name={'district'}
              value={info.district}
-             options={districts.selected}
              onChange={(event, newValue) => {
                 let value = ''
-
                 if (newValue === null) {
                   value = ''
                 } else if ('name' in newValue) {

@@ -19,10 +19,11 @@ import Typography from '@material-ui/core/Typography';
 // import { RATES } from '../../utils/data';
 
 import _ from 'lodash';
-import axios from 'axios'
 
 import { useConfirm } from 'material-ui-confirm';
 import { ToastEmitter } from '../../components/Toast';
+
+import { deliveriesAPI } from '../../services/api/deliveries';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -106,6 +107,27 @@ const HomePage = () => {
   const confirm = useConfirm();
   const intl = useIntl()
   const [delivery, setDelivery] = useState(defaultDelivery)
+  const [cachedSenderLocations, setCachedSenderLocations] = useState({
+    cities: {
+      cached: {},
+      selected: [{id: 0, name: ''}],
+    },
+    districts: {
+      cached: {},
+      selected: [{id: 0, name: ''}],
+    }
+  })
+
+  const [cachedRecipientLocations, setCachedRecipientLocations] = useState({
+    cities: {
+      cached: {},
+      selected: [{id: 0, name: ''}],
+    },
+    districts: {
+      cached: {},
+      selected: [{id: 0, name: ''}],
+    }
+  })
 
   const classes = useStyles();
   const [activeStep, setActiveStep] =useState(0);
@@ -130,10 +152,12 @@ const HomePage = () => {
           <Fragment>
             <AddressDialog
               defaults={delivery.sender}
+              cachedLocations={cachedSenderLocations}
               btnText={'Set Sender'}
               type={'sender'}
               getInfo={(data) => {
-                handleDeliveryState('sender', data)
+                handleDeliveryState('sender', data.info)
+                setCachedSenderLocations(data.cachedLocations)
               }}
             />
             <p>
@@ -145,10 +169,13 @@ const HomePage = () => {
         return (
           <Fragment>
             <AddressDialog
+              defaults={delivery.recipient}
               btnText={'Set Recipient'}
+              cachedLocations={cachedRecipientLocations}
               type={'recipient'}
               getInfo={(data) => {
-                handleDeliveryState('recipient', data)
+                handleDeliveryState('recipient', data.info)
+                setCachedRecipientLocations(data.cachedLocations)
               }}
             />
             <p>
@@ -183,7 +210,7 @@ const HomePage = () => {
     }
   }
 
-  const requestDelivery = () => {
+  const requestDelivery = async () => {
     let requestData  = {
       client_id: "1",
       is_cod: delivery.package.is_cod,
@@ -212,16 +239,14 @@ const HomePage = () => {
     requestData.recipient.landmarks = delivery.recipient.landmarks
     requestData.recipient.street = delivery.recipient.street
 
-    console.log('requestData', requestData)
-    
-    axios.post('https://dev-courier-api.herokuapp.com/deliveries', requestData)
-    .then(function (response) {
+
+    let response = await deliveriesAPI.post(requestData)
+    console.log(response)
+    if (response.status === 'success') {
       ToastEmitter('success', 'Transaction are successfuly created!')
       setDelivery(defaultDelivery)
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
+    }
+    
   }
 
   const computeShippingRate = () => {
@@ -246,10 +271,6 @@ const HomePage = () => {
     })
   }
 
-  // const handleChangeActiveStep = (step) => {
-  //   setActiveStep(step)
-  // }
-
   const handlePackageInfo = (packageInfo) => {
     console.log(packageInfo)
     setDelivery({
@@ -267,15 +288,25 @@ const HomePage = () => {
   }
 
   return (
-    <Page pageTitle={intl.formatMessage({ id: 'home' })}>
+    // <Page pageTitle={intl.formatMessage({ id: 'home' })}>
+    <Page pageTitle={'Delivery'}>
       <Helmet>
-        <title>{ 'e-lamove | Home' }</title>
+        <title>{ 'e-lamove | Delivery' }</title>
       </Helmet>
       <Scrollbar
         style={{ height: '100%', width: '100%', display: 'flex', flex: 1 }}
       >
-        <h1>Delivery</h1>
-        
+        <h1>Details</h1>
+        <h3>Sender</h3>
+        <span>{delivery.sender.full_name}, </span> <span>{delivery.sender.full_name}, </span>
+        <ul>
+              <li>Sender: {delivery.sender.full_name}, {delivery.sender.cellphone_no}, {delivery.sender.street}, {delivery.sender.landmarks}, {delivery.sender.province_name}, {delivery.sender.city_name}, {delivery.sender.district_name}, {delivery.sender.district.postal_code}</li>
+              <li>Recipient: {delivery.recipient.full_name}, {delivery.recipient.cellphone_no}, {delivery.recipient.street}, {delivery.recipient.landmarks}, {delivery.recipient.province_name}, {delivery.recipient.city_name}, {delivery.recipient.district_name}, {delivery.recipient.district.postal_code}</li>
+              <li>Package: {delivery.package.item_name}, {delivery.package.package.name}</li>
+              <li>Shipping Rate: {delivery.package.package.rate}</li>
+              <li>Cash on Delivery: {delivery.package.is_cod}</li>
+              <li>Total Amount: {computeShippingRate()}</li>
+            </ul>
     
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((label, index) => (

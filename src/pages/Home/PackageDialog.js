@@ -97,17 +97,14 @@ const PackageDialog = (props) => {
     })
 
     let packageErrors = validator.getErrors()
+    setErrors(packageErrors)
 
-    if (_.isEmpty(packageErrors) === false) {
-      setErrors(packageErrors)
-      return false
-    }
-
-    return true
+    return _.isEmpty(packageErrors)
   }
 
   const savePackageInfo = () => {
     let isValidPackage = validatePackageInfo()
+
     if (isValidPackage === true) {
       handleDialogClose()
       getPackageInfo({

@@ -154,7 +154,7 @@ const TransactionDialog = (props) => {
  }
 
   const requestForUpdate = (data) => {
-    axios.put('https://dev-courier-api.herokuapp.com/deliveries/' + data['id'].toString(), data)
+    axios.put('http://localhost:8080/deliveries/' + data['id'].toString(), data)
     .then(function (response) {
       console.log(response)
       ToastEmitter('success', 'Transaction are now updated')

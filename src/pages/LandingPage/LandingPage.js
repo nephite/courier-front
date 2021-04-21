@@ -33,7 +33,8 @@ const LandingPage = () => {
   const [errors, setErrors] = useState({})
   
   const handleSearctTransactionLogs = (id) => {
-    axios.get('https://dev-courier-api.herokuapp.com/deliveries/' + id.toString() + '/logs')
+    
+    axios.get('http://localhost:8080/deliveries/' + id.toString() + '/logs')
     .then(function (response) {
       setTransactionLogs(response.data.data.logs)
       
@@ -98,7 +99,7 @@ const LandingPage = () => {
         <title>{ 'e-lamove' }</title>
       </Helmet>
       <h2>Tracking Page</h2>
-      
+      <p>{process.env.NODE_ENV}, {process.env.REACT_APP_WEB_API}, {'tests'}, {console.log(process.env)}</p>
       <div>
         <Link to="/home">Home</Link>
       </div>
@@ -193,7 +194,25 @@ const LandingPage = () => {
       />}
     label="Delivered"
   />
+  <FormControlLabel
+    control={<Checkbox 
+      checked={(transaction.is_successful === 'T')} 
+      name="is_successful" 
+      disabled
+    />}
+    label="Successful"
+  />
+  <FormControlLabel
+    control={<Checkbox 
+      checked={(transaction.is_cancelle === 'T')} 
+      name="is_cancelled" 
+      disabled
+    />}
+    label="Cancelled"
+  />
 </FormGroup>
+      
+
 </FormControl>
         </div>
       
