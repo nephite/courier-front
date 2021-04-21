@@ -6,11 +6,10 @@ import ApiCore from './core'
 // is have a unique endpoint for managing its resources. Every tagging
 // endpoints must create an intance of ApiCore to be able to send
 // a request
-const deliveriesAPI = new ApiCore({
-  getAll: true,
+const staffLogin = new ApiCore({
   post: true,
-  url: 'locations/provinces'
+  url: 'clients/login'
 });
 
 
-export { deliveriesAPI };
+export { staffLogin };

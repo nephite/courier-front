@@ -1,3 +1,4 @@
+import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button'
 import Page from 'material-ui-shell/lib/containers/Page'
 import Paper from '@material-ui/core/Paper'
@@ -9,6 +10,9 @@ import { useAuth } from 'base-shell/lib/providers/Auth'
 import { useHistory } from 'react-router-dom'
 import { useIntl } from 'react-intl'
 import { useMenu } from 'material-ui-shell/lib/providers/Menu'
+import { clientAPI } from '../../services/api/clients'
+import _ from 'lodash'
+import { Validator } from '../../utils/customValidator';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -53,34 +57,98 @@ const SignUp = () => {
   const classes = useStyles()
   const intl = useIntl()
   const history = useHistory()
+  const [apiErrors, setApiErrors] = useState({})
+  const [errors, setErrors] = useState({})
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [firstName, setFirstName] = useState('')
+  const [middleName, setMiddleName] = useState('')
+  const [lastName, setLastName] = useState('')
   const [userEmail, setUserEmail] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const { toggleThis } = useMenu()
-  const { setAuth } = useAuth()
+  // const { toggleThis } = useMenu()
+  // const { setAuth } = useAuth()
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
-    authenticate({
-      displayName: 'User',
-      email: username,
-    })
+    let info = {
+      first_name: firstName,
+      last_name: lastName,
+      middle_name: middleName,
+      username: username,
+      password: password,
+      email: userEmail,
+    }
+
+    let infoCopy = {
+      ...info, 
+      confirmPassword: confirmPassword
+    }
+
+    let isValidInfo = validateInformation(infoCopy)
+
+    if (isValidInfo === false) {
+      return
+    } 
+
+    if (password !== confirmPassword) {
+      setErrors({
+        password: [],
+        confirmPassword: []
+      })
+      setApiErrors(['Password and Confirm password are not matched!'])
+      return 
+    }
+
+
+    let response = await clientAPI.createClient(info)
+    if (_.isEmpty(response.errors) === false) {
+      let errorMesssages = []
+      let errorKeys = {}
+      for (const [key, value] of Object.entries(response.errors)) {
+        errorKeys[key] = []
+        if (key === 'email' && value[0] === 'value does not match regex \'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$\'') {
+          errorMesssages.push('Email is not valid')
+        } else {
+          errorMesssages.push(key + ': ' + value[0])
+        }
+      }
+      setErrors(errorKeys)
+      setApiErrors(errorMesssages)
+    } else {
+      history.push('/signin')
+    }
   }
 
-  const authenticate = (user) => {
-    setAuth({ isAuthenticated: true, ...user })
-    toggleThis('isAuthMenuOpen', false)
-
-    let _location = history.location
-    let _route = '/home'
-
-    if (_location.state && _location.state.from) {
-      _route = _location.state.from.pathname
-      history.push(_route)
-    } else {
-      history.push(_route)
+  const validateInformation = (info) => {
+    let informationSchema = {
+      first_name: [
+        'isEmpty'
+      ],
+      last_name: [
+        'isEmpty'
+      ],
+      username: [
+        'isEmpty'
+      ],
+      password: [
+        'isEmpty'
+      ],
+      email: [
+        'isEmpty'
+      ],
+      confirmPassword: [
+        'isEmpty'
+      ]
     }
+
+    let validator = new Validator()
+    validator.validate(informationSchema, info)
+
+    let infoErrors = validator.getErrors()
+    setErrors(infoErrors)
+    console.log(infoErrors)
+    return _.isEmpty(infoErrors)
   }
 
   return (
@@ -98,8 +166,16 @@ const SignUp = () => {
           <Typography component="h1" variant="h5">
             {intl.formatMessage({ id: 'sign_up', defaultMessage: 'Sign up' })}
           </Typography>
+          { _.isEmpty(apiErrors) === false &&
+            apiErrors.map((value, key) => {
+              return <div key={key}><Alert severity="error">{value}</Alert><br></br></div>
+            }) 
+          }
+          
           <form className={classes.form} onSubmit={handleSubmit} noValidate>
             <TextField
+              autoFocus
+              error={errors.hasOwnProperty('username') === true}
               value={username}
               onInput={(e) => setUsername(e.target.value)}
               variant="outlined"
@@ -113,47 +189,46 @@ const SignUp = () => {
               })}
               name="username"
               autoComplete="username"
-              autoFocus
             />
             <TextField
-              value={''}
-              onInput={() => {}}
+              error={errors.hasOwnProperty('first_name') === true}
+              value={firstName}
+              onInput={(e) => setFirstName(e.target.value)}
               variant="outlined"
               margin="normal"
               required
               fullWidth
               id="first_name"
               label={'First Name'}
-              name="first_name"
+              name="firstName"
               autoComplete="firstname"
-              autoFocus
             />
             <TextField
-              value={''}
-              onInput={() => {}}
+              error={errors.hasOwnProperty('middle_name') === true}
+              value={middleName}
+              onInput={(e) => setMiddleName(e.target.value)}
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              id="middle_name"
+              label={'Middle Name'}
+              name="middleName"
+              autoComplete="middle_name"
+            />
+            <TextField
+              error={errors.hasOwnProperty('last_name') === true}
+              value={lastName}
+              onInput={(e) => setLastName(e.target.value)}
               variant="outlined"
               margin="normal"
               required
               fullWidth
               id="last_name"
               label={'Last Name'}
-              name="last_name"
+              name="lastName"
               autoComplete="last_name"
-              autoFocus
             />
-            <TextField
-              value={''}
-              onInput={() => {}}
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              id="middle_name"
-              label={'Middle Name'}
-              name="last_name"
-              autoComplete="middle_name"
-              autoFocus
-            />
-            <TextField
+            {/* <TextField
               value={''}
               onInput={() => {}}
               variant="outlined"
@@ -212,8 +287,9 @@ const SignUp = () => {
               name="landmarks"
               autoComplete="landmarks"
               autoFocus
-            />
+            /> */}
             <TextField
+              error={errors.hasOwnProperty('email') === true}
               value={userEmail}
               onInput={(e) => setUserEmail(e.target.value)}
               variant="outlined"
@@ -229,6 +305,7 @@ const SignUp = () => {
               autoComplete="email"
             />
             <TextField
+              error={errors.hasOwnProperty('password') === true}
               value={password}
               onInput={(e) => setPassword(e.target.value)}
               variant="outlined"
@@ -245,6 +322,7 @@ const SignUp = () => {
               autoComplete="current-password"
             />
             <TextField
+              error={errors.hasOwnProperty('confirmPassword') === true}
               value={confirmPassword}
               onInput={(e) => setConfirmPassword(e.target.value)}
               variant="outlined"
